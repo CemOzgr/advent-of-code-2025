@@ -1,12 +1,12 @@
 ﻿package main
 
 import (
-	"AdventOfCode/day2"
+	"AdventOfCode/day3"
 	"fmt"
 )
 
 func main() {
-	day1Solution := day2.Solve()
+	solution := day3.Solve()
 
-	fmt.Printf("day2: %d", day1Solution)
+	fmt.Printf("day3: %d", solution)
 }
