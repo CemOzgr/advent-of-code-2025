@@ -29,7 +29,7 @@ func Solve() int {
 		}
 
 		for productId := start; productId <= end; productId++ {
-			if isIdInvalid(strconv.Itoa(productId)) {
+			if isIdInvalidStringCycling(strconv.Itoa(productId)) {
 				sumOfInvalidIds += productId
 			}
 		}
@@ -38,36 +38,46 @@ func Solve() int {
 	return sumOfInvalidIds
 }
 
-func isIdInvalid(productId string) bool {
-	length := len(productId)
-
-	if length%2 != 0 {
-		return false
-	}
-
-	if length == 2 {
-		return productId[0] == productId[1]
-	}
-
-	right := length / 2
-	for left := 0; left < length/2; left++ {
-		if productId[left] != productId[right] {
-			return false
-		}
-
-		right++
-	}
-
-	return true
-}
-
 func isIdInvalidStringCycling(productId string) bool {
+	/*
+		When we add a periodic string to itself,
+		the last occurrence of the pattern in the original string
+		and the first occurrence of the pattern in the added string
+		will create the original string, thus we can say:
+		a string is periodic if it contains itself when doubled
+		note: since every string contains itself, we only check the middle part
+	*/
 	doubledId := (productId + productId)[1 : len(productId)*2-1]
 
+	return kmp(doubledId, productId)
 }
 
-func kmp(text string, pattern string) {
+func kmp(text string, pattern string) bool {
 	lps := constructLps(pattern)
+
+	var i, j int
+
+	for i < len(text) {
+		if text[i] == pattern[j] {
+			i++
+			j++
+
+			if j == len(pattern) {
+				return true
+			}
+
+			continue
+		}
+
+		if j == 0 {
+			i++
+			continue
+		}
+
+		j = lps[j-1]
+	}
+
+	return false
 }
 
 func constructLps(pattern string) []int {
