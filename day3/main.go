@@ -1,45 +1,50 @@
-﻿package day3
+package day3
 
 import (
-	"os"
 	"strings"
 )
 
-func Solve() int {
-	file, err := os.ReadFile("day3/input.txt")
-	if err != nil {
-		panic(err)
-	}
+const NumberOfBatteries = 12
 
-	banks := strings.Split(string(file)[3:], "\r\n")
+func Solve(input string) int {
+	banks := strings.Split(input, "\r\n")
 
 	var totalJolts int
 	for _, bank := range banks {
-		totalJolts += findMaxJolts(bank)
+		totalJolts += findMaxJolts(bank, NumberOfBatteries)
 	}
 
 	return totalJolts
 }
 
-func findMaxJolts(bank string) int {
-	var l, r = 0, 1
-
-	var maxJolt int
-	for l < r && r < len(bank) {
-		leftJolt := int(bank[l] - '0')
-		rightJolt := int(bank[r] - '0')
-		combinedJolt := 10*leftJolt + rightJolt
-
-		if combinedJolt > maxJolt {
-			maxJolt = combinedJolt
-		}
-
-		if rightJolt >= leftJolt {
-			l = r
-		}
-
-		r++
+func findMaxJolts(bank string, numberOfBatteries int) int {
+	batteries := make([]int, len(bank))
+	for i, jolt := range bank {
+		batteries[i] = int(jolt - '0')
 	}
 
-	return maxJolt
+	stack := NewStack(numberOfBatteries)
+
+	for i, jolt := range batteries {
+		if stack.IsEmpty() {
+			stack.Push(jolt)
+			continue
+		}
+
+		allowedSizeToPop := len(batteries) + stack.top - i - numberOfBatteries
+		for stack.ShouldPop(jolt) && allowedSizeToPop > 0 {
+			stack.Pop()
+		}
+
+		if stack.top < NumberOfBatteries {
+			stack.Push(jolt)
+		}
+	}
+
+	var result int
+	for _, jolt := range stack.arr {
+		result = 10*result + jolt
+	}
+
+	return result
 }
