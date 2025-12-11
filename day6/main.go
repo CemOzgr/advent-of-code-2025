@@ -34,21 +34,23 @@ func Solve(input string) int {
 		}
 	}
 
-	var current int
-	for _, line := range lines[:len(lines)-1] {
-		var currentOp int
-		for j, c := range line {
-			_, ok := separators[j]
+	var currentOp int
+	for i := range lines[0] {
+		var current int
+		_, ok := separators[i]
 
-			if !ok && c != ' ' {
-				current = current*10 + int(c-'0')
-			}
-			if ok || j == len(line)-1 {
-				operators[currentOp].numbers = append(operators[currentOp].numbers, current)
-				current = 0
-				currentOp++
+		if ok {
+			currentOp++
+			continue
+		}
+
+		for j := 0; j < len(lines)-1; j++ {
+			if lines[j][i] != ' ' {
+				current = 10*current + int(lines[j][i]-'0')
 			}
 		}
+
+		operators[currentOp].numbers = append(operators[currentOp].numbers, current)
 	}
 
 	var result int
