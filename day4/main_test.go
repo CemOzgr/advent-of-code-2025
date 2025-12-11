@@ -4,7 +4,7 @@ import "testing"
 
 func TestSolve(t *testing.T) {
 	input := "..@@.@@@@.\r\n@@@.@.@.@@\r\n@@@@@.@.@@\r\n@.@@@@..@.\r\n@@.@@@@.@@\r\n.@@@@@@@.@\r\n.@.@.@.@@@\r\n@.@@@.@@@@\r\n.@@@@@@@@.\r\n@.@.@@@.@."
-	expected := 13
+	expected := 43
 
 	got := Solve(input)
 
