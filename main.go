@@ -1,19 +1,19 @@
 package main
 
 import (
-	"AdventOfCode/day4"
+	today "AdventOfCode/day5"
 	"fmt"
 	"os"
 )
 
 func main() {
-	file, err := os.ReadFile("day4/input.txt")
+	file, err := os.ReadFile("day5/input.txt")
 	if err != nil {
 		panic(err)
 	}
 
 	// removing BOM
-	solution := day4.Solve(string(file)[3:])
+	solution := today.Solve(string(file)[3:])
 
-	fmt.Printf("day4: %d", solution)
+	fmt.Printf("solution: %d", solution)
 }
