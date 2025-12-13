@@ -4,22 +4,37 @@ import "strings"
 
 func Solve(input string) int {
 	levels := strings.Split(input, "\r\n")[1:]
+	beamPosition := strings.Index(input, "S")
 
-	beams := make([]bool, len(levels[0]))
-	beams[strings.Index(input, "S")] = true
+	cache := make([][]int, len(levels))
+	for i := 0; i < len(cache); i++ {
+		cache[i] = make([]int, len(levels[0]))
+	}
 
-	var timesSplit int
-	for _, level := range levels {
-		for i := 0; i < len(level); i++ {
-			if level[i] != '^' || !beams[i] {
-				continue
-			}
+	return CountWorlds(cache, levels, 0, beamPosition)
+}
 
-			beams[i] = false
-			beams[i-1], beams[i+1] = true, true
-			timesSplit++
+func CountWorlds(cache [][]int, levels []string, levelIndex int, beamPosition int) int {
+	if levelIndex == len(levels)-1 {
+		if levels[levelIndex][beamPosition] == '^' {
+			return 2
+		}
+
+		return 1
+	}
+
+	if cache[levelIndex][beamPosition] != 0 {
+		return cache[levelIndex][beamPosition]
+	}
+
+	for i, c := range levels[levelIndex] {
+		if c == '^' && beamPosition == i {
+			worlds := CountWorlds(cache, levels, levelIndex+1, i-1) + CountWorlds(cache, levels, levelIndex+1, i+1)
+			cache[levelIndex][beamPosition] = worlds
+
+			return worlds
 		}
 	}
 
-	return timesSplit
+	return CountWorlds(cache, levels, levelIndex+1, beamPosition)
 }
