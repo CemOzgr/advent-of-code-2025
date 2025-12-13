@@ -1,13 +1,13 @@
 package main
 
 import (
-	today "AdventOfCode/day6"
+	today "AdventOfCode/day7"
 	"fmt"
 	"os"
 )
 
 func main() {
-	file, err := os.ReadFile("day6/input.txt")
+	file, err := os.ReadFile("day7/input.txt")
 	if err != nil {
 		panic(err)
 	}
