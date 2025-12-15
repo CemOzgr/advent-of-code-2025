@@ -18,11 +18,11 @@ func MakeSet(size int) UnionFind {
 }
 
 func (unionFind *UnionFind) Find(x int) int {
-	for x != unionFind.parent[x] {
-		x = unionFind.parent[x]
+	if x != unionFind.parent[x] {
+		unionFind.parent[x] = unionFind.Find(unionFind.parent[x])
 	}
 
-	return x
+	return unionFind.parent[x]
 }
 
 func (unionFind *UnionFind) Union(e1 int, e2 int) {
